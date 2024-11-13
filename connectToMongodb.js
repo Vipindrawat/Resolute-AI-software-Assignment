@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const connnetToMongoDb = () => {
+import mongoose from 'mongoose';
+const connectToMongoDb = () => {
     mongoose.connect(process.env.MONGODB_URI).then(() => {
         console.log("connected to mongodb");
     }).catch((error) => {
@@ -7,4 +7,4 @@ const connnetToMongoDb = () => {
     })
 }
 
-module.exports = connnetToMongoDb;
+export default connectToMongoDb;

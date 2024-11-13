@@ -1,7 +1,11 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 const Schema = mongoose.Schema();
 
 const NotesSchema = new Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    },
     title: {
         type: string,
         required: true
@@ -14,14 +18,10 @@ const NotesSchema = new Schema({
         type: string,
         required: true
     },
-    tag: {
-        type: string,
-        default: "xyz"
-    },
     date: {
         type: string,
         default: new Date(Date.now()).toISOString(),
         immutable: true
     }
 })
-module.exports = mongoose.model('notes', NotesSchema);
+export default mongoose.model('notes', NotesSchema);
