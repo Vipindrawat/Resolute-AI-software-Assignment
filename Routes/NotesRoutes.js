@@ -75,6 +75,7 @@ router.delete('/deletenote/:noteId', Authentication, async (req, res) => {
         if (!findNote) {
             return res.status(404).json({ "success": false, "error": "Note not found" });
         }
+
         if (userId !== findNote.user.toString()) {
             return res.status(401).json({ "success": false, "error": "Unauthorized" });
         }

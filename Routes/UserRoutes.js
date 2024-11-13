@@ -1,4 +1,4 @@
-import User from '../Models/UserModel.js';
+import userModel from '../Models/UserModel.js';
 import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -16,7 +16,7 @@ router.post('/signup', [
         const result = validationResult(req);
         if (result.isEmpty()) {
 
-            const findEmail = await User.findOne({ "email": req.body.email });
+            const findEmail = await userModel.findOne({ "email": req.body.email });
             if (findEmail) {
                 res.status(400).json({ "success": false, "error": "email already exists" });
             }
@@ -25,7 +25,7 @@ router.post('/signup', [
                 const pepperPassword = password + process.env.MYPEPPER;
                 const salt = await bcrypt.genSalt(10);
                 const hashedPassword = await bcrypt.hash(pepperPassword, salt);
-                const insertedUser = await User.create({ name, email, password: hashedPassword });
+                const insertedUser = await userModel.create({ name, email, password: hashedPassword });
 
                 // creating json web token:
                 const token = jwt.sign({ id: insertedUser.id }, process.env.SIGNATURE);
@@ -53,7 +53,7 @@ router.post('/signin', [
         const result = validationResult(req);
         if (result.isEmpty()) {
             const { email, password } = req.body;
-            const findEmail = await User.findOne({ email });
+            const findEmail = await userModel.findOne({ email });
             if (!findEmail) {
                 return res.json({ "success": false, "error": "Invalid Credentials" });
             }
