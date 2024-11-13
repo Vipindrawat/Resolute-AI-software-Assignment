@@ -8,7 +8,7 @@ const Authentication = (req, res, next) => {
     }
     try {
         // Verify token and attach payload to req.user
-        const payload = jwt.verify(token, process.env.SIGNATURE);
+        const payload = jwt.verify(token, process.env.JWT_SECRET);
         req.user = payload;
         next(); // Proceed to the next middleware or route handler
     } catch (error) {

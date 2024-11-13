@@ -28,7 +28,7 @@ router.post('/signup', [
                 const insertedUser = await userModel.create({ name, email, password: hashedPassword });
 
                 // creating json web token:
-                const token = jwt.sign({ id: insertedUser.id }, process.env.SIGNATURE);
+                const token = jwt.sign({ id: insertedUser.id }, process.env.JWT_SECRET);
                 res.json({ "success": true, token });
             }
 
@@ -62,7 +62,7 @@ router.post('/signin', [
             if (!passwordCheck) {
                 return res.json({ "success": false, "error": "Invalid Credentials" });
             }
-            const token = jwt.sign({ id: findEmail.id }, process.env.SIGNATURE);
+            const token = jwt.sign({ id: findEmail.id }, process.env.JWT_SECRET);
             res.json({ "success": true, token });
 
         }
