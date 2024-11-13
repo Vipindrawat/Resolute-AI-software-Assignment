@@ -1,5 +1,5 @@
-import User from '../Models/UserModel';
-import {body,validationResult} from 'express-validator';
+import User from '../Models/UserModel.js';
+import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
@@ -20,15 +20,17 @@ router.post('/signup', [
             if (findEmail) {
                 res.status(400).json({ "success": false, "error": "email already exists" });
             }
-            const { name, email, password } = req.body;
-            const pepperPassword = password + process.env.MYPEPPER;
-            const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(pepperPassword, salt);
-            const insertedUser = await User.create({ name, email, password: hashedPassword });
+            else {
+                const { name, email, password } = req.body;
+                const pepperPassword = password + process.env.MYPEPPER;
+                const salt = await bcrypt.genSalt(10);
+                const hashedPassword = await bcrypt.hash(pepperPassword, salt);
+                const insertedUser = await User.create({ name, email, password: hashedPassword });
 
-            // creating json web token:
-            const token = jwt.sign({ id: insertedUser.id }, process.env.SIGNATURE);
-            res.json({ "success": true, token });
+                // creating json web token:
+                const token = jwt.sign({ id: insertedUser.id }, process.env.SIGNATURE);
+                res.json({ "success": true, token });
+            }
 
         }
         else {
@@ -53,12 +55,12 @@ router.post('/signin', [
             const { email, password } = req.body;
             const findEmail = await User.findOne({ email });
             if (!findEmail) {
-                res.json({ "success": false, "error": "Invalid Credentials" });
+                return res.json({ "success": false, "error": "Invalid Credentials" });
             }
             const pepperPassword = password + process.env.MYPEPPER;
             let passwordCheck = await bcrypt.compare(pepperPassword, findEmail.password);
             if (!passwordCheck) {
-                res.json({ "success": false, "error": "Invalid Credentials" });
+                return res.json({ "success": false, "error": "Invalid Credentials" });
             }
             const token = jwt.sign({ id: findEmail.id }, process.env.SIGNATURE);
             res.json({ "success": true, token });

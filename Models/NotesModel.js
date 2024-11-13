@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-const Schema = mongoose.Schema();
+const {Schema} = mongoose;
 
 const NotesSchema = new Schema({
     user: {
@@ -7,19 +7,19 @@ const NotesSchema = new Schema({
         ref: "User"
     },
     title: {
-        type: string,
+        type: String,
         required: true
     },
     description: {
-        type: string,
+        type: String,
         required: true
     },
     content: {
-        type: string,
+        type: String,
         required: true
     },
     date: {
-        type: string,
+        type: String,
         default: new Date(Date.now()).toISOString(),
         immutable: true
     }
